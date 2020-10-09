@@ -1,0 +1,30 @@
+import fnmatch
+import os
+from sklearn.model_selection import train_test_split
+
+root = r"C:\Users\FENGSHIJIA\Desktop"
+filepath = r"C:\Users\FENGSHIJIA\Desktop\files have done.txt"
+outdoor_img = []
+indoors_img = []
+with open(filepath, mode='r') as file_object:
+    contents = file_object.readlines()
+    for name in contents:
+        name = name.strip('\n')
+        if fnmatch.fnmatch(name, '*_indoors_*'):
+            indoors_img.append(name)
+        elif fnmatch.fnmatch(name, '*_outdoor_*'):
+            outdoor_img.append(name)
+
+print(len(outdoor_img))
+print(len(indoors_img))
+
+indoors_train, indoors_test = train_test_split(indoors_img, train_size=0.22)
+print(len(indoors_train))
+
+new_filepath = os.path.join(root, "train images list.txt")
+with open(new_filepath, mode='w') as file_object:
+    for img_name in indoors_train:
+        file_object.write(img_name+'\n')
+    for img_name in outdoor_img:
+        file_object.write(img_name+'\n')
+
